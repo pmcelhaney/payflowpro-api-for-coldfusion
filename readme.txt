@@ -1,4 +1,4 @@
-PayFlowPro Components for Cold Fusion
+PayFlowPro Components for ColdFusion
 
 Simple interface to process credit card transactions via Verisign PayFlowPro. It wraps around the HTTP interface using CFHTTP.
 
