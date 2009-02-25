@@ -5,7 +5,7 @@ Simple interface to process credit card transactions via Verisign PayFlowPro. It
 <!--- Change "TEST" to "LIVE" in live code --->
 <cfset gateway = createObject("component", "HTTPPayFlowProGateway").init("TEST")>	
 
-<cfset transaction = variables.paymentGateway.createTransaction()>
+<cfset transaction = gateway.createTransaction()>
 <cfset transaction.setVendor(vendor)>
 <cfset transaction.setUsernameAndPassword(username,password )>
 <cfset transaction.setCardNumber(card_number)>	
