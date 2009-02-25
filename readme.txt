@@ -16,5 +16,7 @@ Simple interface to process credit card transactions via Verisign PayFlowPro. It
 <cfoutput>
 Approved? #transaction.approved()#<br>
 Result Code: #transaction.resultCode()#<br>
-Response Message: #transaction.responseMessage()#
+Response Message: #transaction.responseMessage()#<br>
+Auth code: #transaction.authCode()#<br>
+PNREF: #transaction.pnRef()#
 </cfoutput>
