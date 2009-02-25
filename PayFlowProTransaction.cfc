@@ -62,8 +62,7 @@
 	<cfset params.tender = "C">
 	<cfset params.amt = variables.amount>
 	<cfset params.expdate = formatExpirationDate()>
-	<cfset params.acct = "#variables.cardNumber#">
-	<cfset params.comment1 = "SBC#dateFormat(now(), 'mmddyy')#">
+	<cfset params.acct = variables.cardNumber>
 	
 	<cfset variables.response = variables.gateway.chargeCard(params, variables.transactionID)>
 	
