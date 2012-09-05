@@ -12,6 +12,14 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
+	
+	
+	
+	PayFlowPro Components for ColdFusion
+	
+	Changes:
+	9/5/2012 Pawel Dulak: changed "chargeCard" function name to "executeTransaction"
+	
 --->
 
 <cfcomponent>
@@ -37,7 +45,7 @@
 </cffunction>
 
 
-<cffunction name = "chargeCard">
+<cffunction name = "executeTransaction">
 	<cfargument name="params">
 	<cfargument name="transactionID">
 
@@ -49,7 +57,7 @@
 
 	<cfreturn parseURLData(CFHTTP.FileContent)>
 </cffunction>
-	
+
 <cffunction name = "encodeURLData" output="no">
 	<cfargument name="params">
 	<cfset var key = 0>

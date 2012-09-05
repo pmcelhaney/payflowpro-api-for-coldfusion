@@ -12,6 +12,11 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
+	
+	
+	 Changes:
+	 9/5/2012 Pawel Dulak: added "credit", "void", "setBaseParams", "setReferenceTransaction" functions and a possibility to use Reference Transaction ID in "run"
+	 
 --->
 
 <cfcomponent>
@@ -20,6 +25,7 @@
 	<cfargument name="gateway">
 	<cfset variables.transactionID = CreateUUID()>
 	<cfset variables.gateway = arguments.gateway>
+	<cfset variables.origID = "">
 	<cfreturn this>
 </cffunction>
 
@@ -45,6 +51,11 @@
 	<cfset variables.cardNumber = arguments.cardNumber>
 </cffunction>
 
+<cffunction name = "setReferenceTransaction" output="no">
+	<cfargument name="pnref">
+	<cfset variables.origid = arguments.pnref>
+</cffunction>
+
 <cffunction name = "setExpirationMonthAndYear" output="no">
 	<cfargument name="month">
 	<cfargument name="year">
@@ -59,7 +70,7 @@
 		<cfreturn "">		
 	</cfif>
 </cffunction>
-	
+
 <cffunction name = "pnRef" output="no">
 	<cfif isDefined("variables.response.pnRef")>
 		<cfreturn variables.response.pnRef>
@@ -67,24 +78,50 @@
 		<cfreturn "">		
 	</cfif>
 </cffunction>
-	
-<cffunction name="run" output="no">
+
+<cffunction name="setBaseParams" output="no">
 	<cfset var params = structNew()>
 	<cfset params.user = variables.username>
 	<cfset params.pwd = variables.password>
 	<cfset params.partner = "Verisign">
 	<cfset params.vendor = variables.vendor>
-	<cfset params.trxtype = "S">
 	<cfset params.tender = "C">
-	<cfset params.amt = variables.amount>
-	<cfset params.expdate = formatExpirationDate()>
-	<cfset params.acct = variables.cardNumber>
-	
-	<cfset variables.response = variables.gateway.chargeCard(params, variables.transactionID)>
-	
+	<cfreturn params>
 </cffunction>
 
+<cffunction name="run" output="no">
+	<cfset params = setBaseparams()>
+	<cfset params.trxtype = "S">
+	<cfset params.amt = variables.amount>
+	<cfif variables.origID NEQ "">
+		<cfset params.origID = variables.origID>
+	<cfelse>
+		<cfset params.expdate = formatExpirationDate()>
+		<cfset params.acct = variables.cardNumber>
+	</cfif>
 
+	<cfset variables.response = variables.gateway.executeTransaction(params, variables.transactionID)>
+
+</cffunction>
+
+<cffunction name="credit" output="no">
+	<cfset params = setBaseparams()>
+	<cfset params.trxtype = "C">
+	<cfset params.amt = variables.amount>
+	<cfset params.origID = variables.origID>
+
+	<cfset variables.response = variables.gateway.executeTransaction(params, variables.transactionID)>
+
+</cffunction>
+
+<cffunction name="void" output="no">
+	<cfset params = setBaseparams()>
+	<cfset params.trxtype = "V">
+	<cfset params.origID = variables.origID>
+
+	<cfset variables.response = variables.gateway.executeTransaction(params, variables.transactionID)>
+
+</cffunction>
 
 <cffunction name = "formatExpirationDate" output="no">
 	<cfreturn numberFormat(variables.expiresMonth, "00") & numberFormat(right(variables.expiresYear, 2), "00")>
@@ -111,6 +148,13 @@
 <cffunction name = "approved" output="no">
 	<cfreturn 0 eq resultCode()>
 </cffunction>
-		
-</cfcomponent>
 
+<cffunction name = "transactionID" output="no">
+	<cfif isDefined("variables.transactionID")>
+		<cfreturn variables.transactionID>
+	<cfelse>
+		<cfreturn -1/>
+	</cfif>
+</cffunction>
+
+</cfcomponent>
