@@ -21,7 +21,7 @@ Auth code: #transaction.authCode()#<br>
 PNREF: #transaction.pnRef()#
 </cfoutput>
 
-Another execution possibilities:
+Other execution possibilities:
 
 Charge Using Reference Transaction:
 
